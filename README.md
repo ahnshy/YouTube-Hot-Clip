@@ -1,46 +1,172 @@
-
 # YouTube Hot Clip (KR / US / EU)
 
-Next.js(App Router) + **MUI**로 만든 **급상승/이슈 영상 모음**.  
-지역(한국/미국/유럽)과 카테고리(종합·정치·경제·사회·연예·예능·정보통신·SW·코딩)를 선택하고, **다크/라이트/나이트 모드**를 지원합니다.
+A modern **trending & hot-issue video dashboard** built with **Next.js (App Router)** and **Material UI**.  
+Browse **rapidly-rising YouTube clips** across **Korea, the US, and Europe**, filter by **topic tabs** (General / Politics / Economy / Society / Entertainment / Variety / ICT / Coding), and switch between **Light / Dark / Night** themes.
+
+> Header includes a **YouTube icon** + **“YouTube Hot Clip”** title.  
+> Inline loading shows a **spinner** next to **“Loading…”** with a **wait cursor** (no blocking modal).
+
+---
 
 ## ✨ Features
-- KR / US / EU(대표 국가 묶음) **트렌딩 영상** 수집
-- 카테고리 탭: 종합 · 정치(News & Politics) · 경제(키워드 필터) · 사회(키워드 필터) · 연예(Entertainment) · 예능(Entertainment) · **정보통신·SW(ICT 키워드)** · **코딩(프로그래밍 키워드)**
-- 키워드 필터 입력(예: 금리, 총선, 파업, AI, Python ...)
-- **MUI 테마 3종**: Light / Dark / Night
-- 반응형 카드 그리드, 썸네일/채널/업로드일/조회수 표시
-- 로딩 시 **스피너 + wait 커서** 표시
 
-## 🛠️ Tech Stack
-- Next.js 15 App Router
-- React 18
-- MUI v6 (Material UI)
-- SWR
+- **Region selector**: Korea (**KR**), United States (**US**), and a representative **EU bundle** (GB, DE, FR, IT, ES, NL, SE)
+- **Topic tabs**: General · Politics (YouTube *News & Politics*) · Economy (keyword filter) · Society (keyword filter) · Entertainment · Variety · **ICT** (keyword filter) · **Coding** (keyword filter)
+- **Keyword filter** (e.g., *rates, election, strike, AI, Python* …) applied on video titles
+- **3 Themes**: Light / Dark / Night (Night uses cool, softer dark tones)
+- **Responsive grid**: thumbnail, channel, upload date, and view count chips
+- **Inline loading** UX: circular spinner + text + `cursor: wait`
 
-## 🔑 환경 변수
-루트에 `.env.local`을 만들고 **YouTube Data API v3** 키를 넣어주세요.
+---
+
+## 🧰 Tech Stack
+
+## 🛠️ Stacks
+![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js&logoColor=white)
+![App Router](https://img.shields.io/badge/App%20Router-enabled-blue?style=flat-square)
+![Material%20UI](https://img.shields.io/badge/MUI-6.x-007FFF?logo=mui&logoColor=white)
+![SWR](https://img.shields.io/badge/SWR-data--fetching-000000?style=flat-square)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
+![YouTube%20Data%20API](https://img.shields.io/badge/YouTube-Data%20API%20v3-FF0000?logo=youtube&logoColor=white)
+
+- **Next.js 15 (App Router)**
+- **React 18**
+- **Material UI v6** (`@mui/material`, `@mui/icons-material`, `@emotion/*`)
+- **TypeScript**
+- **SWR** for client-side fetching and cache
+
+---
+
+## 🔑 Environment
+
+Create `.env.local` at the repo root and add a **YouTube Data API v3** key:
 ```env
 YT_API_KEY=YOUR_YOUTUBE_API_KEY
 ```
 
-> NOTE: 유럽(EU)은 GB/DE/FR/IT/ES/NL/SE 대표 국가들의 트렌딩을 합쳐 상위 일부를 노출합니다.
+- The key is **only used on the server route** (`app/api/trending/route.ts`) and is **not exposed to the browser**.
+- For production, consider **API restrictions** (restrict to *YouTube Data API v3*) and, if applicable, server IP restrictions.
 
-## ▶️ 실행
+---
+
+## 🚀 Getting Started
+
 ```bash
-npm i
-next dev
-# build
-next build && next dev
+npm install   # or: pnpm i / yarn
+npm run dev
+# http://localhost:3000
 ```
 
-## 📁 주요 파일
-- `app/page.tsx` : 대시보드(클라이언트) — 지역/카테고리/검색 제어 및 목록 렌더
-- `app/api/trending/route.ts` : 서버 API — YouTube 트렌딩 취합/필터/정규화
-- `components/*` : 테마, 탭/토글, 카드 컴포넌트
-- `lib/youtube.ts` : 카테고리 매핑/키워드/유럽 국가 목록
+Production:
+```bash
+npm run build && npm start
+```
 
-## 📌 한계와 메모
-- 유튜브 API는 일일 쿼터 제한이 있으므로 운영 시 캐시/백엔드 저장을 권장합니다.
-- ‘경제/사회/정보통신·SW/코딩’은 YouTube 카테고리로 구분이 애매하므로 **제목 키워드**로 1차 필터링합니다.
-- “급상승”은 `chart=mostPopular`을 사용해 근사치로 구현했습니다.
+---
+
+## 📁 Project Structure
+
+```
+app/
+  layout.tsx                 # Root layout + ThemeRegistry (MUI Provider, mode persistence)
+  page.tsx                   # Main dashboard: toolbar, tabs, filters, grid, inline loader
+  api/trending/route.ts      # Server API route (YouTube mostPopular + filters + EU bundle)
+  globals.css                # Global styles (grid, toolbar, etc.)
+components/
+  CategoryTabs.tsx           # Topic tabs (General/Politics/Economy/Society/Entertainment/Variety/ICT/Coding)
+  RegionPicker.tsx           # KR / US / EU selector
+  ModeSwitcher.tsx           # Light / Dark / Night toggle
+  ThemeRegistry.tsx          # MUI theme factory (incl. "night" palette)
+  VideoCard.tsx              # Card layout for each video
+lib/
+  youtube.ts                 # Category mapping, keyword dictionaries, EU region list
+next.config.ts               # Remote image patterns for YouTube thumbnails
+package.json
+tsconfig.json                # includes "@/..." path alias
+```
+
+---
+
+## 🧠 Core Components & Logic
+
+### `app/api/trending/route.ts`
+- Calls **YouTube Data API v3** `videos?chart=mostPopular&part=snippet,statistics&regionCode=...`.
+- **Category mapping**:
+  - *Politics* → `videoCategoryId=25 (News & Politics)`
+  - *Entertainment/Variety* → `videoCategoryId=24`
+  - *Economy / Society / ICT / Coding* → **keyword filters** over the **title**
+- **EU bundle** is a union of several countries (GB, DE, FR, IT, ES, NL, SE); results are merged and **de‑duplicated**, with a simple **priority** favoring KR > US > EU for duplicates.
+- Returns normalized items:
+  ```ts
+  {
+    items: [{ id, title, channelTitle, publishedAt, thumbnail, viewCount?, region }]
+  }
+  ```
+- Uses **revalidate** on fetch to keep a light cache (tunable).
+
+### `app/page.tsx`
+- **Toolbar**: YouTube icon + **YouTube Hot Clip** title, **RegionPicker**, **ModeSwitcher**
+- **CategoryTabs** + **keyword filter** field + **Refresh** button
+- **SWR** drives data; while loading, shows **CircularProgress + “Loading…”** with a **wait cursor**
+- Responsive **grid** of `VideoCard` components
+
+### `components/ThemeRegistry.tsx`
+- Provides a shared **MUI theme** with **Light/Dark/Night** modes
+- Persists the mode in **localStorage**
+- *Night* mode uses a cooler dark background with tuned primary/secondary hues
+
+### `lib/youtube.ts`
+- **CATEGORY_MAP**: maps tabs to YouTube category IDs or keyword mode
+- **KEYWORDS**: dictionaries for Economy/Society/ICT/Coding
+- **pickEuropeRegions()**: returns country list for the EU bundle
+
+---
+
+## 🔧 Customization
+
+- **Keywords**: refine dictionaries in `lib/youtube.ts` (e.g., add industry or language-specific terms)
+- **EU bundle**: adjust returned countries in `pickEuropeRegions()`
+- **Theme defaults**: change initial mode in `ThemeRegistry.tsx`
+- **Card fields**: include more statistics (likes/comments) by expanding `part` + quota budget
+
+---
+
+## 🧩 Changelog (this build)
+
+1. **Branding**
+   - Project renamed to **YouTube Hot Clip**; header now shows the **YouTube icon** before the title.
+2. **Loading UX**
+   - Inline spinner + `"Loading..."` text, with `cursor: wait` while fetching.
+3. **New tabs**
+   - Added **ICT** and **Coding** topic tabs (keyword-driven filters).
+4. **EU results**
+   - Aggregates GB/DE/FR/IT/ES/NL/SE and de-duplicates videos with region priority.
+
+---
+
+## ❓ Troubleshooting
+
+- **No results & console shows `Missing YT_API_KEY`**  
+  Add `.env.local` and restart the dev server.
+- **Quota exhausted**  
+  YouTube Data API v3 has daily quota. Introduce server-side caching or store snapshots.
+- **`Images not allowed` for thumbnails**  
+  Ensure `next.config.ts` includes `i.ytimg.com`/`img.youtube.com` in `images.remotePatterns`.
+- **`Module not found: @/...`**  
+  Check `tsconfig.json` includes:  
+  ```json
+  { "compilerOptions": { "baseUrl": ".", "paths": { "@/*": ["./*"] } } }
+  ```
+
+---
+
+## 🔗 Data Source
+
+- **YouTube Data API v3** — public developer API with daily quota (API key required)
+
+---
+
+## 📜 License
+
+Demo / sample use. Replace with your project’s license as needed.

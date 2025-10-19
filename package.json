@@ -1,0 +1,32 @@
+{
+  "name": "youtube-hot-clip",
+  "version": "1.0.2",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/cache": "11.13.1",
+    "@emotion/react": "11.13.3",
+    "@emotion/server": "11.11.0",
+    "@emotion/styled": "11.13.0",
+    "@mui/icons-material": "6.1.6",
+    "@mui/material": "6.1.6",
+    "clsx": "2.1.1",
+    "next": "15.0.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "swr": "2.2.5"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.4",
+    "@types/react": "18.3.10",
+    "@types/react-dom": "18.3.0",
+    "typescript": "5.6.2",
+    "eslint": "9.14.0",
+    "eslint-config-next": "15.0.3"
+  }
+}

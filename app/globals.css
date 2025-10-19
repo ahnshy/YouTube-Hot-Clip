@@ -1,0 +1,8 @@
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; }
+:root { color-scheme: light dark; }
+.container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.toolbar { display:flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 16px; }
